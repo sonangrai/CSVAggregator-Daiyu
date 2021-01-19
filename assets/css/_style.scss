@@ -14,25 +14,27 @@
   margin: 2em;
 }
 .table-container {
-  overflow: auto;
   background-color: #fff;
   height: 80vh;
   h2 {
     margin: 1em;
   }
-  table {
-    background-color: #fff;
-    border-spacing: 0;
-    width: 100%;
-    tbody {
-      tr:nth-child(odd) {
-        background-color: #f6f9fd;
-      }
-      tr:first-child() {
-        font-weight: 600;
-      }
-      td {
-        padding: 0.5em;
+  .table-box {
+    overflow-x: scroll;
+    table {
+      background-color: #fff;
+      border-spacing: 0;
+      width: 100%;
+      tbody {
+        tr:nth-child(odd) {
+          background-color: #f6f9fd;
+        }
+        tr:first-child() {
+          font-weight: 600;
+        }
+        td {
+          padding: 0.5em;
+        }
       }
     }
   }

@@ -30,12 +30,9 @@ function readFile(path) {
 
 //A function that renders the table after the file is loaded
 function createTable(tableData) {
-  var container = document.createElement("section");
-  container.classList.add("table-container");
+  var container = document.createElement("div");
+  container.classList.add("table-box");
   container.id = "tbl-part";
-  var title = document.createElement("h2");
-  var titletext = document.createTextNode("登録する情報を確認してください。");
-  title.appendChild(titletext);
   var table = document.createElement("table");
   table.id = "tbl";
   var tableBody = document.createElement("tbody");
@@ -56,11 +53,7 @@ function createTable(tableData) {
 
   container.appendChild(table);
   table.appendChild(tableBody);
-  document.body.appendChild(container);
-
-  var getbl = document.getElementById("tbl-part");
-  var getbl2 = document.getElementById("tbl");
-  getbl.insertBefore(title, getbl2);
+  document.getElementById("here").appendChild(container);
 }
 
 //Saving to Database
