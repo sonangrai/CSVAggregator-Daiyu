@@ -1,0 +1,208 @@
+#result {
+  display: none;
+}
+.blw {
+  background-color: #e5e5e5;
+  padding: 2em 0;
+  .blck-btn {
+    width: 200px;
+    margin: 0 auto;
+    margin-bottom: 2em;
+  }
+}
+.info {
+  margin: 2em;
+}
+.table-container {
+  overflow: auto;
+  background-color: #fff;
+  height: 80vh;
+  h2 {
+    margin: 1em;
+  }
+  table {
+    background-color: #fff;
+    border-spacing: 0;
+    width: 100%;
+    tbody {
+      tr:nth-child(odd) {
+        background-color: #f6f9fd;
+      }
+      tr:first-child() {
+        font-weight: 600;
+      }
+      td {
+        padding: 0.5em;
+      }
+    }
+  }
+}
+
+.list-container {
+  h2 {
+    margin: 0 1em;
+  }
+}
+.tbltit {
+  text-align: left;
+  width: 98%;
+  margin-bottom: 0;
+}
+section.table {
+  width: 98%;
+  margin: 1em auto;
+  background-color: #fff;
+  #tbl-x {
+    overflow-x: scroll;
+  }
+  #data_paginate {
+    padding: 2em 0;
+    display: flex;
+    a {
+      margin: 0 1em;
+    }
+    span {
+      a {
+        margin: 0;
+        background: #fff;
+        padding: 0.8em;
+        text-decoration: none;
+        color: #000;
+        border-top: 1px solid #c5c5c5;
+        border-right: 1px solid #c5c5c5;
+        border-bottom: 1px solid #c5c5c5;
+        &:first-child {
+          border-left: 1px solid #c5c5c5;
+        }
+        &:last-child {
+          border-left: 1px solid #c5c5c5;
+        }
+      }
+      a.current {
+        background-color: #000;
+        color: #fff;
+      }
+    }
+  }
+  table {
+    background-color: #fff;
+    thead {
+      th {
+        text-align: left;
+        padding: 6px;
+        color: #333;
+      }
+    }
+    tbody {
+      tr {
+        &:nth-child(odd) {
+          background-color: #e5e5e5;
+        }
+        td {
+          padding: 6px;
+        }
+      }
+    }
+  }
+}
+.blck-btn {
+  color: $primary-color;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  border: 1px solid $primary-color;
+  border-radius: 8px;
+  font-family: "Noto Sans JP", sans-serif;
+}
+.del-btn {
+  color: #fff;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  border: 1px solid $primary-color;
+  border-radius: 8px;
+  font-family: "Noto Sans JP", sans-serif;
+  background: #000;
+}
+
+button {
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+}
+
+#testtbl {
+  #spacer {
+    &:nth-child(1) {
+      background-color: #e5e5e5;
+    }
+    height: 20px;
+  }
+}
+
+.refresh {
+  background-color: #000;
+  color: #fff;
+  padding: 0.5em 2em;
+  border-radius: 8px;
+  border: 0;
+  margin-top: 2em;
+  font-size: 1.2em;
+  display: none;
+}
+.numtd {
+  text-align: right;
+}
+div#data_length {
+  display: flex;
+  padding: 1em;
+  justify-content: flex-end;
+}
+.dt-buttons {
+  text-align: right;
+  width: 98%;
+  padding: 1em;
+  margin-bottom: 1em;
+  button {
+    padding: 0.5em 1em;
+    background-color: $primary-color;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 0;
+  }
+}
+
+#srchform {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  .form-item {
+    width: 45%;
+    &:last-child {
+      width: 100%;
+    }
+    select {
+      font-size: 1em;
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      color: #333;
+    }
+  }
+}
+
+.topbutton {
+  width: 98%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  .tempbtn {
+    background-color: #000;
+    color: #fff;
+    padding: 0.5em 2em;
+    border-radius: 8px;
+    border: 0;
+    margin: 1em 0;
+    font-size: 1.2em;
+  }
+}

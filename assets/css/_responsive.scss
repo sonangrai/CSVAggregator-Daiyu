@@ -1,0 +1,13 @@
+@media screen and (max-width: 426px) {
+  header {
+    .row {
+      justify-content: center;
+      text-align: center;
+      .boxes {
+        .blck-btn {
+          margin-bottom: 1em;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap");
+@import "./variable";
+@import "./layout";
+@import "./style";
+@import "./responsive";
+
+body {
+  background-color: #e5e5e5;
+  font-family: "Noto Sans JP", sans-serif;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+a {
+  cursor: pointer;
+}
+.space-between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container {
+  width: 96%;
+  margin: 0 auto;
+}
+.mb-4 {
+  margin-bottom: 4em;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.ml-5 {
+  margin-left: 40%;
+}
+
+input {
+  cursor: pointer;
+}

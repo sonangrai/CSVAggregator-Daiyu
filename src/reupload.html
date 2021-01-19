@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline';"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <title>Select File</title>
+  </head>
+  <body class="reupload">
+    <div class="top">
+      <div class="pagination">
+        <span>トップページ ＞ 店舗会員情報をCSVで登録する</span>
+      </div>
+      <div class="title">
+        <h2>店舗会員情報をCSVで登録する</h2>
+      </div>
+    </div>
+    <div class="upload-box">
+      <div class="row">
+        <div class="up-desc">
+          CSVファイルを選択
+          <small>必須</small>
+        </div>
+        <div class="up-btn">
+          <input type="file" id="vc" hidden onchange="check(this)" />
+          <label for="vc">CSVファイルを選択する</label>
+        </div>
+      </div>
+    </div>
+    <div class="msg-box">
+      <span id="msg"></span>
+    </div>
+    <footer>
+      <div class="row">
+        <a class="backbtn" href="./index.html">トップページに戻る</a>
+        <a class="nextbtn" id="nextbtn" href="./preview2.html">登録する</a>
+      </div>
+    </footer>
+  </body>
+  <script src="./realupload.js"></script>
+</html>

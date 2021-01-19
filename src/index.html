@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>会員統合ツール(仮)</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline';"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      window.$ = window.jQuery = require("jquery");
+    </script>
+  </head>
+  <body class="index">
+    <header>
+      <div class="row space-between">
+        <h2>顧客一覧</h2>
+        <div class="boxes">
+          <button class="del-btn" id="ec_del">
+            ECのCSV会員データを全て削除する
+          </button>
+          <button class="del-btn" id="vc_del">
+            店舗のCSV会員データを全て削除する
+          </button>
+          <button class="blck-btn" id="ec">EC会員情報をCSVで登録する</button>
+          <button class="blck-btn" id="vc">店舗会員情報をCSVで登録する</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="topbutton">
+      <button class="tempbtn" id="process">会員判定の処理を実施する</button>
+    </div>
+
+    <section class="message" id="checkbox">
+      <p id="checkrl">※店舗のCSVの会員データは0件です。</p>
+      <p id="checkec">※ECのCSVの会員データは0件です。</p>
+    </section>
+
+    <section class="inputters">
+      <form id="srchform">
+        <div class="form-item mb-4">
+          <h2>1.会員種別を選択 <span>必須</span></h2>
+          <div class="checkbox-cont">
+            <div class="checkbox-item">
+              <input
+                type="checkbox"
+                id="all_ck"
+                name="customer_category"
+                value="all"
+                onClick="toggle(this)"
+                checked
+              />
+              <label for="all"> 全て</label>
+            </div>
+            <div class="checkbox-item">
+              <input
+                type="checkbox"
+                id="common_ck"
+                name="customer_category"
+                value="common"
+                onClick="checkall(this)"
+                checked
+              />
+              <label for="common"> 共通会員</label>
+            </div>
+            <div class="checkbox-item">
+              <input
+                type="checkbox"
+                id="real_ck"
+                name="customer_category"
+                value="real"
+                onClick="checkall(this)"
+                checked
+              />
+              <label for="real"> 店舗のみ会員</label>
+            </div>
+            <div class="checkbox-item">
+              <input
+                type="checkbox"
+                id="ec_ck"
+                name="customer_category"
+                value="ec"
+                onClick="checkall(this)"
+                checked
+              />
+              <label for="ec"> ECのみ会員</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-item mb-4">
+          <h2>2.年代を選択 <span>任意</span></h2>
+          <div class="select-cont">
+            <select name="age1" id="age1" required>
+              <option value="">選択してください</option>
+              <option value="age >= 0 and age <= 9">0～9歳</option>
+              <option value="age >= 10 and age <= 19">10～19歳</option>
+              <option value="age >= 20 and age <= 29">20～29歳</option>
+              <option value="age >= 30 and age <= 39">30～39歳</option>
+              <option value="age >= 40 and age <= 49">40～49歳</option>
+              <option value="age >= 50 and age <= 59">50～59歳</option>
+              <option value="age >= 60 and age <= 69">60～69歳</option>
+              <option value="age >= 70 and age <= 79">70～79歳</option>
+              <option value="age >= 80 and age <= 89">80～89歳</option>
+              <option value="age >= 90">90歳～</option>
+              <option value="age < 0">その他</option>
+            </select>
+            <select name="age2" id="age2" required>
+              <option value="">選択してください</option>
+              <option value="age >= 0 and age <= 9">0～9歳</option>
+              <option value="age >= 10 and age <= 19">10～19歳</option>
+              <option value="age >= 20 and age <= 29">20～29歳</option>
+              <option value="age >= 30 and age <= 39">30～39歳</option>
+              <option value="age >= 40 and age <= 49">40～49歳</option>
+              <option value="age >= 50 and age <= 59">50～59歳</option>
+              <option value="age >= 60 and age <= 69">60～69歳</option>
+              <option value="age >= 70 and age <= 79">70～79歳</option>
+              <option value="age >= 80 and age <= 89">80～89歳</option>
+              <option value="age >= 90">90歳～</option>
+              <option value="age < 0">その他</option>
+            </select>
+            <select name="age3" id="age3" required>
+              <option value="">選択してください</option>
+              <option value="age >= 0 and age <= 9">0～9歳</option>
+              <option value="age >= 10 and age <= 19">10～19歳</option>
+              <option value="age >= 20 and age <= 29">20～29歳</option>
+              <option value="age >= 30 and age <= 39">30～39歳</option>
+              <option value="age >= 40 and age <= 49">40～49歳</option>
+              <option value="age >= 50 and age <= 59">50～59歳</option>
+              <option value="age >= 60 and age <= 69">60～69歳</option>
+              <option value="age >= 70 and age <= 79">70～79歳</option>
+              <option value="age >= 80 and age <= 89">80～89歳</option>
+              <option value="age >= 90">90歳～</option>
+              <option value="age < 0">その他</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-item mb-4">
+          <h2>3. 都道府県エリア <span>任意</span></h2>
+          <div class="select-cont">
+            <select name="address1" id="address1" required>
+              <option value="">選択してください</option>
+              <option value="北海道">北海道</option>
+              <option value="青森県">青森県</option>
+              <option value="岩手県">岩手県</option>
+              <option value="宮城県">宮城県</option>
+              <option value="秋田県">秋田県</option>
+              <option value="山形県">山形県</option>
+              <option value="福島県">福島県</option>
+              <option value="茨城県">茨城県</option>
+              <option value="栃木県">栃木県</option>
+              <option value="群馬県">群馬県</option>
+              <option value="埼玉県">埼玉県</option>
+              <option value="千葉県">千葉県</option>
+              <option value="東京都">東京都</option>
+              <option value="神奈川県">神奈川県</option>
+              <option value="新潟県">新潟県</option>
+              <option value="富山県">富山県</option>
+              <option value="石川県">石川県</option>
+              <option value="福井県">福井県</option>
+              <option value="山梨県">山梨県</option>
+              <option value="長野県">長野県</option>
+              <option value="岐阜県">岐阜県</option>
+              <option value="静岡県">静岡県</option>
+              <option value="愛知県">愛知県</option>
+              <option value="三重県">三重県</option>
+              <option value="滋賀県">滋賀県</option>
+              <option value="京都府">京都府</option>
+              <option value="大阪府">大阪府</option>
+              <option value="兵庫県">兵庫県</option>
+              <option value="奈良県">奈良県</option>
+              <option value="和歌山県">和歌山県</option>
+              <option value="鳥取県">鳥取県</option>
+              <option value="島根県">島根県</option>
+              <option value="岡山県">岡山県</option>
+              <option value="広島県">広島県</option>
+              <option value="山口県">山口県</option>
+              <option value="徳島県">徳島県</option>
+              <option value="香川県">香川県</option>
+              <option value="愛媛県">愛媛県</option>
+              <option value="高知県">高知県</option>
+              <option value="福岡県">福岡県</option>
+              <option value="佐賀県">佐賀県</option>
+              <option value="長崎県">長崎県</option>
+              <option value="熊本県">熊本県</option>
+              <option value="大分県">大分県</option>
+              <option value="宮崎県">宮崎県</option>
+              <option value="鹿児島県">鹿児島県</option>
+              <option value="沖縄県">沖縄県</option>
+            </select>
+            <select name="address2" id="address2" required>
+              <option value="">選択してください</option>
+              <option value="北海道">北海道</option>
+              <option value="青森県">青森県</option>
+              <option value="岩手県">岩手県</option>
+              <option value="宮城県">宮城県</option>
+              <option value="秋田県">秋田県</option>
+              <option value="山形県">山形県</option>
+              <option value="福島県">福島県</option>
+              <option value="茨城県">茨城県</option>
+              <option value="栃木県">栃木県</option>
+              <option value="群馬県">群馬県</option>
+              <option value="埼玉県">埼玉県</option>
+              <option value="千葉県">千葉県</option>
+              <option value="東京都">東京都</option>
+              <option value="神奈川県">神奈川県</option>
+              <option value="新潟県">新潟県</option>
+              <option value="富山県">富山県</option>
+              <option value="石川県">石川県</option>
+              <option value="福井県">福井県</option>
+              <option value="山梨県">山梨県</option>
+              <option value="長野県">長野県</option>
+              <option value="岐阜県">岐阜県</option>
+              <option value="静岡県">静岡県</option>
+              <option value="愛知県">愛知県</option>
+              <option value="三重県">三重県</option>
+              <option value="滋賀県">滋賀県</option>
+              <option value="京都府">京都府</option>
+              <option value="大阪府">大阪府</option>
+              <option value="兵庫県">兵庫県</option>
+              <option value="奈良県">奈良県</option>
+              <option value="和歌山県">和歌山県</option>
+              <option value="鳥取県">鳥取県</option>
+              <option value="島根県">島根県</option>
+              <option value="岡山県">岡山県</option>
+              <option value="広島県">広島県</option>
+              <option value="山口県">山口県</option>
+              <option value="徳島県">徳島県</option>
+              <option value="香川県">香川県</option>
+              <option value="愛媛県">愛媛県</option>
+              <option value="高知県">高知県</option>
+              <option value="福岡県">福岡県</option>
+              <option value="佐賀県">佐賀県</option>
+              <option value="長崎県">長崎県</option>
+              <option value="熊本県">熊本県</option>
+              <option value="大分県">大分県</option>
+              <option value="宮崎県">宮崎県</option>
+              <option value="鹿児島県">鹿児島県</option>
+              <option value="沖縄県">沖縄県</option>
+            </select>
+            <select name="address3" id="address3" required>
+              <option value="">選択してください</option>
+              <option value="北海道">北海道</option>
+              <option value="青森県">青森県</option>
+              <option value="岩手県">岩手県</option>
+              <option value="宮城県">宮城県</option>
+              <option value="秋田県">秋田県</option>
+              <option value="山形県">山形県</option>
+              <option value="福島県">福島県</option>
+              <option value="茨城県">茨城県</option>
+              <option value="栃木県">栃木県</option>
+              <option value="群馬県">群馬県</option>
+              <option value="埼玉県">埼玉県</option>
+              <option value="千葉県">千葉県</option>
+              <option value="東京都">東京都</option>
+              <option value="神奈川県">神奈川県</option>
+              <option value="新潟県">新潟県</option>
+              <option value="富山県">富山県</option>
+              <option value="石川県">石川県</option>
+              <option value="福井県">福井県</option>
+              <option value="山梨県">山梨県</option>
+              <option value="長野県">長野県</option>
+              <option value="岐阜県">岐阜県</option>
+              <option value="静岡県">静岡県</option>
+              <option value="愛知県">愛知県</option>
+              <option value="三重県">三重県</option>
+              <option value="滋賀県">滋賀県</option>
+              <option value="京都府">京都府</option>
+              <option value="大阪府">大阪府</option>
+              <option value="兵庫県">兵庫県</option>
+              <option value="奈良県">奈良県</option>
+              <option value="和歌山県">和歌山県</option>
+              <option value="鳥取県">鳥取県</option>
+              <option value="島根県">島根県</option>
+              <option value="岡山県">岡山県</option>
+              <option value="広島県">広島県</option>
+              <option value="山口県">山口県</option>
+              <option value="徳島県">徳島県</option>
+              <option value="香川県">香川県</option>
+              <option value="愛媛県">愛媛県</option>
+              <option value="高知県">高知県</option>
+              <option value="福岡県">福岡県</option>
+              <option value="佐賀県">佐賀県</option>
+              <option value="長崎県">長崎県</option>
+              <option value="熊本県">熊本県</option>
+              <option value="大分県">大分県</option>
+              <option value="宮崎県">宮崎県</option>
+              <option value="鹿児島県">鹿児島県</option>
+              <option value="沖縄県">沖縄県</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-item mb-4">
+          <h2>4.EC店舗の種類を選択 <span>任意</span></h2>
+          <div class="select-cont">
+            <select name="store_name1" id="store_name1" required>
+              <option value="">選択してください</option>
+              <option value="自社サイト">自社サイト</option>
+              <option value="アマゾン">アマゾン</option>
+              <option value="楽天">楽天</option>
+              <option value="au PAY マーケット">au PAY マーケット</option>
+              <option value="Yahoo!">Yahoo!</option>
+              <option value="電話注文">電話注文</option>
+              <option value="特販">特販</option>
+              <option value="dショッピング(仮)">dショッピング(仮)</option>
+            </select>
+            <select name="store_name2" id="store_name2" required>
+              <option value="">選択してください</option>
+              <option value="自社サイト">自社サイト</option>
+              <option value="アマゾン">アマゾン</option>
+              <option value="楽天">楽天</option>
+              <option value="au PAY マーケット">au PAY マーケット</option>
+              <option value="Yahoo!">Yahoo!</option>
+              <option value="電話注文">電話注文</option>
+              <option value="特販">特販</option>
+              <option value="dショッピング(仮)">dショッピング(仮)</option>
+            </select>
+            <select name="store_name3" id="store_name3" required>
+              <option value="">選択してください</option>
+              <option value="自社サイト">自社サイト</option>
+              <option value="アマゾン">アマゾン</option>
+              <option value="楽天">楽天</option>
+              <option value="au PAY マーケット">au PAY マーケット</option>
+              <option value="Yahoo!">Yahoo!</option>
+              <option value="電話注文">電話注文</option>
+              <option value="特販">特販</option>
+              <option value="dショッピング(仮)">dショッピング(仮)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-item">
+          <h2>5.購入月を選択 <span>必須</span></h2>
+          <div class="date-cont">
+            <input type="month" name="from" id="Start" />
+            <span>~</span>
+            <input type="month" name="to" id="End" />
+          </div>
+        </div>
+        <div class="form-item">
+          <button class="filterbtn" id="getdata">
+            <i class="fa fa-search"></i> 検索する
+          </button>
+          <button
+            class="refresh"
+            id="refresh"
+            onclick="window.location.reload()"
+          >
+            新しい検索
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="result">
+      <h2>検索結果</h2>
+      <small>サマリー</small>
+      <div class="row">
+        <div class="res-item" id="member">
+          <h3>会員数</h3>
+          <div class="head">
+            <span>総合計</span>
+            <span id="member_total"></span>
+          </div>
+          <div class="res">
+            <span>店舗のみ会員</span>
+            <span class="member_cnt" id="real-mem">0 名</span>
+          </div>
+          <div class="res">
+            <span>ECのみ会員</span>
+            <span class="member_cnt" id="ec-mem">0 名</span>
+          </div>
+          <div class="res common">
+            <span>共通会員</span>
+            <span class="member_cnt" id="cmn">0 名</span>
+          </div>
+          <div id="loading-item">読み込み中です...</div>
+        </div>
+        <div class="res-item" id="money">
+          <h3>購入金額</h3>
+          <div class="head">
+            <span>総合計</span>
+            <span id="money_total"></span>
+          </div>
+          <div class="res">
+            <span>店舗</span>
+            <span class="money_cnt" id="real-cash">0 円</span>
+          </div>
+          <div class="res">
+            <span>EC</span>
+            <span class="money_cnt" id="ec-cash">0 円</span>
+          </div>
+          <div id="loading-item">読み込み中です...</div>
+        </div>
+        <div class="res-item" id="payment-item">
+          <h3>購入点数</h3>
+          <div class="head">
+            <span>総購入点数</span>
+            <span id="item_total"></span>
+          </div>
+          <div class="res">
+            <span>店舗</span>
+            <span class="item_cnt" id="real-amt">0 円</span>
+          </div>
+          <div class="res">
+            <span>EC</span>
+            <span class="item_cnt" id="ec-amt">0 円</span>
+          </div>
+          <div id="loading-item">読み込み中です...</div>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="tbltit">詳細</h2>
+    <section class="table">
+      <div id="tbl-cont">
+        <table id="data">
+          <thead>
+            <tr>
+              <th>会員種別</th>
+              <th>名前</th>
+              <th>年齢</th>
+              <th>電話番号</th>
+              <th>郵便番号</th>
+              <th>エリア</th>
+              <th>EC購入月</th>
+              <th>店舗購入月</th>
+              <th>購入金額(合計)</th>
+              <th>購入点数(合計)</th>
+              <th>購入金額(店舗)</th>
+              <th>購入点数(店舗)</th>
+              <th>購入金額(EC)</th>
+              <th>購入点数(EC)</th>
+              <th>EC店舗名</th>
+              <th>来店回数</th>
+              <th>ECの購入回数</th>
+              <th>店コード</th>
+              <th>店舗名称</th>
+              <th>アプリ会員</th>
+            </tr>
+          </thead>
+          <tbody id="testtbl"></tbody>
+        </table>
+
+        <div id="csv">
+          <button id="csv_exp">
+            <i class="fa fa-download"></i> 検索した顧客情報をCSVで出力する
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div id="msg">
+      <div class="msg_base">
+        <p class="title" id="msg_title">店舗のCSV会員データを全て削除します</p>
+        <p class="massage" id="msg_massage">一度削除すると元に戻せません。</p>
+        <p>
+          <input type="checkbox" id="msg_check" name="del_msg" value="del" />
+          <label for="del" id="conformradio">
+            CSV会員データを全て削除します</label
+          >
+        </p>
+        <button class="msgbtn_cancel" id="msg_cancel">キャンセル</button>
+        <button class="msgbtn_del_loc" id="msg_del" data-type="real">
+          削除する
+        </button>
+      </div>
+    </div>
+
+    <div id="loading">読み込み中です...</div>
+    <script src="./index.js" type="module"></script>
+    <script>
+      document.querySelector("#Start").valueAsDate = new Date();
+      document.querySelector("#End").valueAsDate = new Date();
+      function toggle(source) {
+        checkboxes = document.getElementsByName("customer_category");
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+          checkboxes[i].checked = source.checked;
+        }
+      }
+      function checkall(source) {
+        if (source.checked == false) {
+          document.getElementById("all_ck").checked = false;
+        } else {
+          checko();
+        }
+      }
+      function checko() {
+        if (
+          document.getElementById("common_ck").checked == false ||
+          document.getElementById("real_ck").checked == false ||
+          document.getElementById("ec_ck").checked == false
+        ) {
+          document.getElementById("all_ck").checked = false;
+        } else {
+          document.getElementById("all_ck").checked = true;
+        }
+      }
+    </script>
+  </body>
+</html>
