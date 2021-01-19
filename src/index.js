@@ -2,7 +2,7 @@ const path = require("path");
 var $ = require("jquery");
 const connection = require("../config");
 const getdata = require("./getdata");
-const savedb3 = require("./tempdb");
+const savedb3 = require("./common/tempdb");
 const deletetmp = require("./deletetmp");
 require("datatables.net-dt")(window, $);
 require("datatables.net-buttons-dt")(window, $);
@@ -21,17 +21,13 @@ function getec() {
     "データベースのデータをチェックしています。しばらくお待ちください。";
   document.getElementById("loading").style.display = "flex";
   return new Promise(function (myResolve, myReject) {
-    connection.query(
-//      `SELECT COUNT(*) AS Total FROM e_ec_sales`,
-      `SELECT * FROM e_ec_sales LIMIT 1`,
-      (err, result) => {
-        if (err) {
-          myReject(err);
-        } else {
-          myResolve(result);
-        }
+    connection.query(`SELECT * FROM e_ec_sales LIMIT 1`, (err, result) => {
+      if (err) {
+        myReject(err);
+      } else {
+        myResolve(result);
       }
-    );
+    });
   });
 }
 getec().then((result) => {
@@ -45,17 +41,13 @@ getec().then((result) => {
 
 function getreal() {
   return new Promise(function (myResolve, myReject) {
-    connection.query(
-//      `SELECT COUNT(*) AS Total FROM e_real_sales`,
-      `SELECT * FROM e_real_sales LIMIT 1`,
-      (err, result) => {
-        if (err) {
-          myReject(err);
-        } else {
-          myResolve(result);
-        }
+    connection.query(`SELECT * FROM e_real_sales LIMIT 1`, (err, result) => {
+      if (err) {
+        myReject(err);
+      } else {
+        myResolve(result);
       }
-    );
+    });
   });
 }
 getreal().then((result) => {
@@ -143,7 +135,6 @@ document.getElementById("msg_del").addEventListener("click", () => {
   if (tp === "ec") {
     //Checking tbl
     connection.query(
-//      `SELECT COUNT(*) AS Total FROM e_ec_sales`,
       `SELECT * FROM e_ec_sales LIMIT 1`,
       function (err, result) {
         if (err) {
@@ -183,7 +174,6 @@ document.getElementById("msg_del").addEventListener("click", () => {
   } else if (tp === "real") {
     //Checking tbl
     connection.query(
-//      `SELECT COUNT(*) AS Total FROM e_real_sales`,
       `SELECT * FROM e_real_sales LIMIT 1`,
       function (err, result) {
         if (err) {

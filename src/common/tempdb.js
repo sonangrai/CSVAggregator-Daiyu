@@ -1,4 +1,4 @@
-const connection = require("../config");
+const connection = require("../../config");
 
 //Saving To DB
 function savedb3() {

@@ -1,4 +1,4 @@
-const connection = require("../config");
+const connection = require("../../config");
 
 //Geting file name from storage and extracting Name
 var file_name = localStorage.getItem("file");
