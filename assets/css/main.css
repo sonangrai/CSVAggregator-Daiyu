@@ -565,7 +565,6 @@ div#csv #csv_exp {
 }
 
 .table-container {
-  overflow: auto;
   background-color: #fff;
   height: 80vh;
 }
@@ -574,21 +573,25 @@ div#csv #csv_exp {
   margin: 1em;
 }
 
-.table-container table {
+.table-container .table-box {
+  overflow-x: scroll;
+}
+
+.table-container .table-box table {
   background-color: #fff;
   border-spacing: 0;
   width: 100%;
 }
 
-.table-container table tbody tr:nth-child(odd) {
+.table-container .table-box table tbody tr:nth-child(odd) {
   background-color: #f6f9fd;
 }
 
-.table-container table tbody tr:first-child() {
+.table-container .table-box table tbody tr:first-child() {
   font-weight: 600;
 }
 
-.table-container table tbody td {
+.table-container .table-box table tbody td {
   padding: 0.5em;
 }
 

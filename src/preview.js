@@ -7,7 +7,8 @@ const filelog = require("./common/csvlog");
 
 //Shift to UTF
 var paths = localStorage.getItem("file");
-var filename = paths.replace(/^.*[\\\/]/, "");
+
+//Shift to UTF8 for table creation
 readFile(paths);
 function readFile(path) {
   fs.readFile(path, function (error, text) {
@@ -60,70 +61,13 @@ function createTable(tableData) {
 document.getElementById("savedb").addEventListener("click", () => {
   //Loading screen invoke
   document.getElementById("model").style.display = "flex";
-  //Creating new csv
-  var ws = fs.createWriteStream("new" + filename); //出力ファイル名は new+元ファイル名
+  console.log(paths);
 
-  // For Production
-  const newfilepath = path.join(__dirname, "../../../") + "\\new" + filename;
-  // For Development
-  //const newfilepath = path.join(__dirname, "..") + "\\new" + filename;
-
-  var parser = csv
-    .parse({ trim: true }, function (err, data) {
-      //For Row
-      for (var i = 0; i < data.length; i++) {
-        var outdata = "";
-        //FOr Column
-        for (var j = 0; j < data[i].length; j++) {
-          //outdata = outdata + data[i][j].replace(/,/g, "");
-          outdata =
-            outdata +
-            data[i][j]
-              .replace(/(?:\r\n|\r|\n)/g, "")
-              .replace(/,/g, "")
-              .replace(/['"]+/g, "");
-          if (j + 1 == data[i].length) {
-            outdata = outdata + "\n";
-          } else {
-            outdata = outdata + ",";
-          }
-        }
-        ws.write(outdata);
-      }
+  //Using Daiyu
+  savedb1(paths)
+    .then((result) => {
+      filelog("ec");
+      document.getElementById("model").style.display = "flex";
     })
-    .on("end", () => {
-      ws.end();
-      const stream = fs
-        .createReadStream(newfilepath)
-        .pipe(
-          csv.parse({ delimiter: ",", from_line: 2, trim: true, bom: true })
-        );
-
-      let count = 0; // 読み込み回数
-      let total = 0; // 合計byte数
-      var ret; //Get error count
-
-      stream.on("readable", () => {
-        let chunk;
-        while ((chunk = stream.read()) !== null) {
-          count++;
-          total += chunk.length;
-          //Spliting lines by delimiter comma
-          var result = chunk.toString("utf-8").split(",");
-          savedb1(result);
-        }
-      });
-
-      stream.on("end", () => {
-        console.log(`${count} Obtained in divided times`);
-        console.log(`I got a total of ${total} bytes`);
-        fs.unlinkSync(newfilepath);
-        filelog("ec");
-      });
-    });
-
-  fs.createReadStream(paths)
-    .pipe(iconv.decodeStream("SJIS"))
-    .pipe(iconv.encodeStream("UTF-8"))
-    .pipe(parser);
+    .catch((err) => console.log(err));
 });
