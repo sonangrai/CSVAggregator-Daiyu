@@ -12,6 +12,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <link href="../node_modules/clusterize.js/clusterize.css" rel="stylesheet">
+    <script src="../node_modules/clusterize.js/clusterize.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
       window.$ = window.jQuery = require("jquery");
@@ -417,6 +419,8 @@
     </section>
 
     <h2 class="tbltit">詳細</h2>
+
+<!--
     <section class="table">
       <div id="tbl-cont">
         <table id="data">
@@ -447,13 +451,87 @@
           <tbody id="testtbl"></tbody>
         </table>
 
+      -->
+
+      <section class="table">
+
+        <div class="clusterize tbl-cont">
+          <table class="table_title">
+          
+            <!-- Visual headers -->
+            <thead>
+              <tr>
+                <td>会員種別</td>
+                <td>名前</td>
+                <td>年齢</td>
+                <td>電話番号</td>
+                <td>郵便番号</td>
+                <td>エリア</td>
+                <td>EC購入月</td>
+                <td>店舗購入月</td>
+                <td>購入金額(合計)</td>
+                <td>購入点数(合計)</td>
+                <td>購入金額(店舗)</td>
+                <td>購入点数(店舗)</td>
+                <td>購入金額(EC)</td>
+                <td>購入点数(EC)</td>
+                <td>EC店舗名</td>
+                <td>来店回数</td>
+                <td>ECの購入回数</td>
+                <td>店コード</td>
+                <td>店舗名称</td>
+                <td>アプリ会員</td>
+            </tr>
+            </thead>
+          </table>
+          <div id="scrollArea" class="clusterize-scroll">
+            <table class="table_in">
+            
+              <!-- Hidden helper headers to keep columns width (specified by css), td's must be empty -->
+              <thead>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody id="contentArea" class="clusterize-content">
+                <tr class="clusterize-no-data">
+        
+                  <!-- Note colspan which forces single td to fill whole table width -->
+                  <td colspan="100">表示するデータがありません。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+
         <div id="csv">
           <button id="csv_exp">
             <i class="fa fa-download"></i> 検索した顧客情報をCSVで出力する
           </button>
         </div>
-      </div>
     </section>
+
 
     <div id="msg">
       <div class="msg_base">

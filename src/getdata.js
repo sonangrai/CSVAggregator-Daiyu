@@ -4,6 +4,8 @@ const getmoney = require("./getmoney");
 const getitem = require("./getitem");
 const iconv = require("iconv-lite");
 
+const Clusterize = require('clusterize.js');
+
 var data = [];
 
 //Saving To DB
@@ -124,20 +126,20 @@ function getdata(
   ,GROUP_CONCAT(DISTINCT v_temp.customer_tel SEPARATOR ',') as 'customer_tel' 
   ,v_temp.postal_code as 'postal_code' 
   ,v_temp.address as 'address'
-  ,GROUP_CONCAT(DISTINCT v_temp.ec_payment_date SEPARATOR ',') as 'ec_payment_date'
-  ,GROUP_CONCAT(DISTINCT v_temp.real_payment_date SEPARATOR ',') as 'real_payment_date'
+  ,ifnull(GROUP_CONCAT(DISTINCT v_temp.ec_payment_date SEPARATOR ','),"") as 'ec_payment_date'
+  ,ifnull(GROUP_CONCAT(DISTINCT v_temp.real_payment_date SEPARATOR ','),"") as 'real_payment_date'
   ,sum(v_temp.payment_money_sum) as 'payment_money_sum'
   ,sum(v_temp.payment_item_cnt_sum) as 'payment_item_cnt_sum'
   ,sum(v_temp.payment_money_real_sum) as 'payment_money_real_sum'
   ,sum(v_temp.payment_item_cnt_real_sum) as 'payment_item_cnt_real_sum'
   ,sum(v_temp.payment_money_ec_sum) as 'payment_money_ec_sum'
   ,sum(v_temp.payment_item_cnt_ec_sum) as 'payment_item_cnt_ec_sum'
-  ,GROUP_CONCAT(DISTINCT v_temp.ec_name SEPARATOR ',') as 'ec_name'
+  ,ifnull(GROUP_CONCAT(DISTINCT v_temp.ec_name SEPARATOR ','),"") as 'ec_name'
   ,sum(v_temp.real_coming_cnt) as 'real_coming_cnt'
   ,sum(v_temp.ec_coming_cnt) as 'ec_coming_cnt'
-  ,GROUP_CONCAT(DISTINCT v_temp.store_id SEPARATOR ',') as 'store_id'
-  ,GROUP_CONCAT(DISTINCT v_temp.store_name SEPARATOR ',') as 'store_name'
-  ,max(v_temp.app) as 'app'
+  ,ifnull(GROUP_CONCAT(DISTINCT v_temp.store_id SEPARATOR ','),"") as 'store_id'
+  ,ifnull(GROUP_CONCAT(DISTINCT v_temp.store_name SEPARATOR ','),"") as 'store_name'
+  ,ifnull(max(v_temp.app),"") as 'app'
   
   FROM db_aggregator.v_temp 
   
@@ -202,12 +204,23 @@ function getdata(
         for (let i = 0; i < result.length; i++) {
           data.push(result[i]);
         }
+
         document.getElementById("loading").style.display = "none";
+
         // all rows have been received
+        var cl =[];
         for (var i = 0; i < data.length; i++) {
-          console.log("i:" + i + "/" + data.length);
-          createTable(data[i]);
+//          console.log("i:" + i + "/" + data.length);
+          cl[i] = createTable(data[i]);
+          //          createTable(data[i]);
         }
+
+//        console.log("temp1=" + cl[1]);
+
+//        console.log("temp2="+cl);
+//        console.log("temp3="+cl);
+
+/*
         //Replacing the " " with blank
         var x = document.querySelectorAll("#td");
         for (var i = 0; i < x.length; i++) {
@@ -234,6 +247,108 @@ function getdata(
             },
           },
         });
+*/
+
+        // Cluster
+        var data_t = [];
+
+        for (let i = 0; i < cl.length; i++){
+//          data_t[i] = "<tr>" + cl[i] + "</tr>";
+          data_t[i] =  cl[i];
+        }
+
+
+        // JavaScript
+        var lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet.';
+
+        var $scroll = $('#scrollArea');
+        var $content = $('#contentArea');
+        var $headers = $("#headersArea");
+
+        /**
+         * Makes header columns equal width to content columns
+         */
+        var fitHeaderColumns = (function() {
+          var prevWidth = [];
+          return function() {
+            var $firstRow = $content.find('tr:not(.clusterize-extra-row):first');
+            var columnsWidth = [];
+            $firstRow.children().each(function() {
+              columnsWidth.push($(this).width());
+            });
+            if (columnsWidth.toString() == prevWidth.toString()) return;
+            $headers.find('tr').children().each(function(i) {
+              $(this).width(columnsWidth[i]);
+            });
+            prevWidth = columnsWidth;
+          }
+        })();
+
+        /**
+         * Keep header equal width to tbody
+         */
+        var setHeaderWidth = function() {
+          $headers.width($content.width());
+        }
+
+        /**
+         * Set left offset to header to keep equal horizontal scroll position
+         */
+        var setHeaderLeftMargin = function(scrollLeft) {
+          $headers.css('margin-left', -scrollLeft);
+        }
+
+        var clusterize = new Clusterize({
+          rows: data_t,
+          scrollId: 'scrollArea',
+          contentId: 'contentArea',
+          callbacks: {
+            clusterChanged: function() {
+              fitHeaderColumns();
+              setHeaderWidth();
+            }
+          }
+        });
+
+        var debounce = function(fn, interval) {
+          var timer
+          return function() {
+            clearTimeout(timer)
+            timer = setTimeout(function() {
+              fn()
+            }, interval)
+          }
+        }
+
+        /**
+         * Update header columns width on window resize
+         */
+        $(window).resize(debounce(fitHeaderColumns, 150));
+
+        /**
+         * Update header left offset on scroll
+         */
+        $scroll.on('scroll', (function() {
+          var prevScrollLeft = 0;
+          return function() {
+            var scrollLeft = $(this).scrollLeft();
+            if (scrollLeft == prevScrollLeft) return;
+            prevScrollLeft = scrollLeft;
+
+            setHeaderLeftMargin(scrollLeft);
+          }
+        }()));
+
+
+
+
+/*
+        var clusterize = new Clusterize({
+          rows: data_t,
+          scrollId: 'scrollArea',
+          contentId: 'contentArea',
+        });
+*/
 
         //Caling other queries
         getmember(
@@ -284,10 +399,11 @@ function getdata(
       }
     });
   });
-
+  
   //A function that renders the table after the file is loaded
   function createTable(tableData) {
-    var row = $("<tr />");
+    
+    /*
     $("#testtbl").append(row);
     row.append($("<td id='td'>" + tableData.customer_category + "</td>"));
     row.append($("<td id='td'>" + tableData.customer_name + "</td>"));
@@ -347,6 +463,51 @@ function getdata(
     row.append($("<td id='td'>" + tableData.store_id + "</td>"));
     row.append($("<td id='td'>" + tableData.store_name + "</td>"));
     row.append($("<td id='td'>" + tableData.app + "</td>"));
+*/
+    
+    var row = "<tr>";
+
+    row = row + "<td id='td'>" + tableData.customer_category + "</td>";
+    row = row + "<td id='td'>" + tableData.customer_name + "</td>";
+    row = row + "<td id='td' class='numtd'>" + tableData.age + "</td>";
+    row = row + "<td id='td' class='numtd'>" + tableData.customer_tel + "</td>";
+    row = row + "<td id='td' class='numtd'>" + tableData.postal_code + "</td>";
+    row = row + "<td id='td'>" + tableData.address + "</td>";
+    row = row + "<td id='td'>" + tableData.ec_payment_date + "</td>";
+    row = row + "<td id='td'>" + tableData.real_payment_date + "</td>";
+    row = row + "<td id='td'>" + tableData.payment_money_sum + "</td>";
+    row = row + "<td id='td' class='numtd'>" +
+          tableData.payment_item_cnt_sum.toLocaleString() +
+          "</td>";
+    row = row + "<td id='td' class='numtd'>" +
+          tableData.payment_money_real_sum.toLocaleString() +
+          "</td>";
+    row = row + 
+        "<td id='td' class='numtd'>" +
+          tableData.payment_item_cnt_real_sum.toLocaleString() +
+          "</td>"
+
+    row = row + 
+        "<td id='td' class='numtd'>" +
+          tableData.payment_money_ec_sum.toLocaleString() +
+          "</td>"
+
+    row = row + 
+        "<td id='td' class='numtd'>" +
+          tableData.payment_item_cnt_ec_sum +
+          "</td>"
+
+    row = row + "<td id='td' class='numtd'>" + tableData.ec_name + "</td>";
+    row = row + "<td id='td'>" + tableData.real_coming_cnt.toLocaleString() + "</td>";
+    row = row + "<td id='td'>" + tableData.ec_coming_cnt.toLocaleString() + "</td>";
+
+    row = row + "<td id='td'>" + tableData.store_id + "</td>";
+    row = row + "<td id='td'>" + tableData.store_name + "</td>";
+    row = row + "<td id='td'>" + tableData.app + "</td>";
+
+    ret = row;
+
+    return ret;
   }
 }
 
@@ -375,6 +536,7 @@ document.getElementById("csv_exp").addEventListener("click", () => {
 
   element.click();
 });
+
 function ConvertToCSV(objArray) {
   var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
   var str = "";
