@@ -291,9 +291,8 @@ function getmember(
 
           //        console.log("result2[0].key1 = " + result2[0].key1);
 
-          console.log(result2);
           if (result2.length != 0) {
-            common_first = result2;
+            common_first = result2.length;
           }
 
           var i2_n = 0;
@@ -390,6 +389,7 @@ function getmember(
       document.getElementById("loading").style.display = "none";
 
       var edit_cnt = 0;
+      var sum = 0;
 
       commoncnt(
         from,
@@ -409,6 +409,15 @@ function getmember(
           console.log("cnt = " + cnt + "Common First = " + common_first);
           edit_cnt = common_first - cnt;
           document.getElementById("cmn").innerHTML = `${edit_cnt} 名`;
+          // $(".member_cnt").each(function () {
+          //   sum += parseFloat($(this).text().replace(/\D/g, "")); // Or this.innerHTML, this.innerText
+          // });
+          sum += parseFloat($("#real-mem").text().replace(/\D/g, ""));
+          sum += parseFloat($("#ec-mem").text().replace(/\D/g, ""));
+          sum -= edit_cnt;
+          $("#member_total").append(
+            $("<div></div>").text(sum.toLocaleString() + " 名")
+          );
         })
         .catch((err) => {
           alert(err);
@@ -418,14 +427,6 @@ function getmember(
       for (var i = 0; i < data.length; i++) {
         createRow(data[i]);
       }
-
-      var sum = 0;
-      $(".member_cnt").each(function () {
-        sum += parseFloat($(this).text().replace(/\D/g, "")); // Or this.innerHTML, this.innerText
-      });
-      $("#member_total").append(
-        $("<div></div>").text(sum.toLocaleString() + " 名")
-      );
       $("#member #loading-item").css("display", "none");
     });
 
