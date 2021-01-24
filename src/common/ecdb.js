@@ -10,7 +10,8 @@ function savedb1(paths) {
   }
   var newpath = addslashes(paths);
   // Making the array suitable for the MYSQL query
-  var query = `SET character_set_database=sjis;
+  var query = `SET GLOBAL local_infile = 1;
+  SET character_set_database=sjis;
 
     LOAD DATA LOCAL INFILE "${newpath}" 
     INTO TABLE e_ec_sales 

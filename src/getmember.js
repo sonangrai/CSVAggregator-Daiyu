@@ -404,7 +404,8 @@ view.customer_category
               commoncnt++;
             }
           }
-      //    document.getElementById("cmn").innerHTML = `${commoncnt} 名`;
+          console.log(commoncnt);
+          //    document.getElementById("cmn").innerHTML = `${commoncnt} 名`;
         }
       }
     );
