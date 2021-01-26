@@ -80,7 +80,7 @@ function getmoney(
   } else if (address1 !== "" && address2 !== "" && address3 !== "") {
     address = `address like '${address1}' OR address like  '${address2}' OR address like  '${address3}'`;
   } else {
-    address = "address = address";
+    address = "address = address or address is null ";
   }
 
   //ec name

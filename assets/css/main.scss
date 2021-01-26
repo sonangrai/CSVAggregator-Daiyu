@@ -56,3 +56,91 @@ a {
 input {
   cursor: pointer;
 }
+
+/* Set appropriate styles for table */
+.table_in {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* It's important to set equal width for both thead's (visual and helper) */
+.clusterize thead td:nth-child(1) {
+  width: 5%;
+}
+
+.clusterize thead td:nth-child(2) {
+  width: 10%;
+}
+
+.clusterize thead td:nth-child(3) {
+  width: 4%;
+}
+
+.clusterize thead td:nth-child(4) {
+  width: 10%;
+}
+
+.clusterize thead td:nth-child(5) {
+  width: 10%;
+}
+
+.clusterize thead td:nth-child(6) {
+  width: 5%;
+}
+
+.clusterize thead td:nth-child(7) {
+  width: 5%;
+}
+
+.clusterize thead td:nth-child(8) {
+  width: 5%;
+}
+
+.clusterize thead td:nth-child(9) {
+  width: 5%;
+}
+
+.clusterize thead td:nth-child(10) {
+  width: 5%;
+}
+
+.clusterize thead td:nth-child(11) {
+  width: 5%;
+}
+
+.clusterize thead td:nth-child(12) {
+  width: 3%;
+}
+
+.clusterize thead td:nth-child(13) {
+  width: 5%;
+}
+
+.clusterize thead td:nth-child(14) {
+  width: 3%;
+}
+
+.clusterize thead td:nth-child(15) {
+  width: 5%;
+}
+
+.clusterize thead td:nth-child(16) {
+  width: 3%;
+}
+
+.clusterize thead td:nth-child(17) {
+  width: 3%;
+}
+
+.clusterize thead td:nth-child(18) {
+  width: 3%;
+}
+
+.clusterize thead td:nth-child(19) {
+  width: 3%;
+}
+
+.clusterize thead td:nth-child(20) {
+  width: 3%;
+}
+/*# sourceMappingURL=main.css.map */

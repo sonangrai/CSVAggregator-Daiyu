@@ -83,7 +83,7 @@ function getmember(
   } else if (address1 !== "" && address2 !== "" && address3 !== "") {
     address = `address like '${address1}' OR address like  '${address2}' OR address like  '${address3}'`;
   } else {
-    address = "address = address";
+    address = "address = address or address is null ";
   }
 
   //ec name
@@ -194,7 +194,7 @@ function getmember(
     } else if (address1 !== "" && address2 !== "" && address3 !== "") {
       address = `address like '${address1}' OR address like  '${address2}' OR address like  '${address3}'`;
     } else {
-      address = "address = address";
+      address = "address = address or address is null ";
     }
 
     //ec name
@@ -275,6 +275,7 @@ function getmember(
       
       `;
 
+
     return new Promise((resolve, reject) => {
       connection.query(query2, function (err, result2) {
         if (err) {
@@ -323,12 +324,28 @@ function getmember(
     FROM 
     (
       SELECT 
-      customer_category 
-      ,customer_name 
+      v_temp.customer_category
+      ,v_temp.customer_name
+      ,case when max(v_temp.age) < 0 then 'その他(未登録)' else max(v_temp.age) end as 'age'
       ,GROUP_CONCAT(DISTINCT v_temp.customer_tel SEPARATOR ',') as 'customer_tel' 
-      ,postal_code 
-
-      FROM db_aggregator.v_temp 
+      ,v_temp.postal_code as 'postal_code' 
+      ,v_temp.address as 'address'
+      ,ifnull(GROUP_CONCAT(DISTINCT v_temp.ec_payment_date SEPARATOR ','),"") as 'ec_payment_date'
+      ,ifnull(GROUP_CONCAT(DISTINCT v_temp.real_payment_date SEPARATOR ','),"") as 'real_payment_date'
+      ,sum(v_temp.payment_money_sum) as 'payment_money_sum'
+      ,sum(v_temp.payment_item_cnt_sum) as 'payment_item_cnt_sum'
+      ,sum(v_temp.payment_money_real_sum) as 'payment_money_real_sum'
+      ,sum(v_temp.payment_item_cnt_real_sum) as 'payment_item_cnt_real_sum'
+      ,sum(v_temp.payment_money_ec_sum) as 'payment_money_ec_sum'
+      ,sum(v_temp.payment_item_cnt_ec_sum) as 'payment_item_cnt_ec_sum'
+      ,ifnull(GROUP_CONCAT(DISTINCT v_temp.ec_name SEPARATOR ','),"") as 'ec_name'
+      ,sum(v_temp.real_coming_cnt) as 'real_coming_cnt'
+      ,sum(v_temp.ec_coming_cnt) as 'ec_coming_cnt'
+      ,ifnull(GROUP_CONCAT(DISTINCT v_temp.store_id SEPARATOR ','),"") as 'store_id'
+      ,ifnull(GROUP_CONCAT(DISTINCT v_temp.store_name SEPARATOR ','),"") as 'store_name'
+      ,ifnull(max(v_temp.app),"") as 'app'
+      
+      FROM db_aggregator.v_temp
 
       WHERE 
           
@@ -361,15 +378,19 @@ function getmember(
       )
 
       GROUP BY 
-      customer_category 
-      ,customer_name 
-      ,postal_code 
+      
+      v_temp.customer_category
+      ,v_temp.customer_name 
+      ,v_temp.postal_code
+      ,v_temp.address 
+
 
     ) as view 
 
     GROUP BY 
     view.customer_category 
   ;`
+
   );
   query
     .on("error", function (err) {
@@ -387,6 +408,7 @@ function getmember(
     })
     .on("end", function () {
       document.getElementById("loading").style.display = "none";
+
 
       var edit_cnt = 0;
       var sum = 0;
@@ -407,14 +429,17 @@ function getmember(
       )
         .then((cnt) => {
           console.log("cnt = " + cnt + "Common First = " + common_first);
-          edit_cnt = common_first - cnt;
+          if (type.indexOf("common") > -1) {
+            edit_cnt = common_first - cnt;
+          }
           document.getElementById("cmn").innerHTML = `${edit_cnt} 名`;
           // $(".member_cnt").each(function () {
           //   sum += parseFloat($(this).text().replace(/\D/g, "")); // Or this.innerHTML, this.innerText
           // });
           sum += parseFloat($("#real-mem").text().replace(/\D/g, ""));
           sum += parseFloat($("#ec-mem").text().replace(/\D/g, ""));
-          sum -= edit_cnt;
+          sum += edit_cnt;
+
           $("#member_total").append(
             $("<div></div>").text(sum.toLocaleString() + " 名")
           );

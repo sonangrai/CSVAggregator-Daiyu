@@ -80,7 +80,7 @@ function getitem(
   } else if (address1 !== "" && address2 !== "" && address3 !== "") {
     address = `address like '${address1}' OR address like  '${address2}' OR address like  '${address3}'`;
   } else {
-    address = "address = address";
+    address = "address = address or address is null ";
   }
 
   //ec name
@@ -172,6 +172,7 @@ function getitem(
     })
     .on("end", function () {
       document.getElementById("loading").style.display = "none";
+
       // all rows have been received
       for (var i = 0; i < data.length; i++) {
         createRow(data[i]);
@@ -183,6 +184,8 @@ function getitem(
       $("#item_total").append(
         $("<div></div>").text(sum.toLocaleString() + " 点")
       );
+
+
       $("#payment-item #loading-item").css("display", "none");
     });
 

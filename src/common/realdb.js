@@ -19,19 +19,19 @@ function savedb2(paths) {
     IGNORE 1 LINES 
     (@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13)
     SET 
-    customer_id=@1 
-    ,customer_name=@2 
-    ,customer_name_kana=@3 
-    ,customer_postal_code=@4 
-    ,customer_address1=@5 
-    ,customer_tel1=@6 
-    ,customer_birthday=@7 
-    ,store_id=@8 
-    ,payment_date=@9 
-    ,payment_money=@10 
-    ,payment_item_cnt=@11 
-    ,coming_cnt=@12 
-    ,mobile_e_mail=@13 
+    customer_id=replace(replace(@1,' ',''),'　','') 
+    ,customer_name=replace(replace(@2,' ',''),'　','') 
+    ,customer_name_kana=replace(replace(@3,' ',''),'　','') 
+    ,customer_postal_code=replace(replace(@4,' ',''),'　','') 
+    ,customer_address1=replace(replace(@5,' ',''),'　','') 
+    ,customer_tel1=replace(replace(@6,' ',''),'　','') 
+    ,customer_birthday=replace(replace(@7,' ',''),'　','') 
+    ,store_id=replace(replace(@8,' ',''),'　','') 
+    ,payment_date=replace(replace(@9,' ',''),'　','') 
+    ,payment_money=replace(replace(@10,' ',''),'　','') 
+    ,payment_item_cnt=replace(replace(@11,' ',''),'　','') 
+    ,coming_cnt=replace(replace(@12,' ',''),'　','') 
+    ,mobile_e_mail=replace(replace(@13,' ',''),'　','') 
     ;`;
 
   console.log(query);

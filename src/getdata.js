@@ -86,7 +86,7 @@ function getdata(
   } else if (address1 !== "" && address2 !== "" && address3 !== "") {
     address = `address like '${address1}' OR address like  '${address2}' OR address like  '${address3}'`;
   } else {
-    address = "address = address";
+    address = "address = address or address is null ";
   }
 
   //ec name
@@ -195,6 +195,9 @@ function getdata(
   console.log("address:" + address);
   console.log("ec_name:" + ec_name);
   console.log("date:" + date);
+
+//  console.log("get_data_sql:" + query);
+
 
   new Promise((resolve, reject) => {
     connection.query(query, function (err, result) {
@@ -518,6 +521,30 @@ document.getElementById("csv_exp").addEventListener("click", () => {
   document.getElementById("loading").style.display = "flex";
 
   var items = [];
+
+  items.push({
+    customer_category:"会員種別"
+    ,customer_name:"名前"
+    ,age:"年齢"
+    ,customer_tel:"電話番号"
+    ,postal_code:"郵便番号"
+    ,address:"エリア"
+    ,ec_payment_date:"EC購入月"
+    ,real_payment_date:"店舗購入月"
+    ,payment_money_sum:"購入金額(合計)"
+    ,payment_item_cnt_sum:"購入点数(合計)"
+    ,payment_money_real_sum:"購入金額(店舗)"
+    ,payment_item_cnt_real_sum:"購入点数(店舗)"
+    ,payment_money_ec_sum:"購入金額(EC)"
+    ,payment_item_cnt_ec_sum:"購入点数(EC)"
+    ,ec_name:"EC店舗名"
+    ,real_coming_cnt:"来店回数"
+    ,ec_coming_cnt:"ECの購入回数"
+    ,store_id:"店コード"
+    ,store_name:"店舗名称"
+    ,app:"アプリ会員"
+  });
+
   for (let i = 0; i < data.length; i++) {
     items.push(data[i]);
   }
@@ -530,7 +557,7 @@ document.getElementById("csv_exp").addEventListener("click", () => {
   //Creating Download
   var element = document.createElement("a");
   element.setAttribute("href", URL.createObjectURL(blob));
-  element.setAttribute("download", "newcsv.csv");
+  element.setAttribute("download", "顧客情報CSV.csv");
   element.style.display = "none";
   document.getElementById("loading").style.display = "none";
 

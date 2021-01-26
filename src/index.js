@@ -123,7 +123,7 @@ document.getElementById("process").addEventListener("click", () => {
   document.getElementById("msg_massage").innerHTML =
     "一度実施すると元に戻せません。<br> ※処理中は、画面操作ができません。";
   document.getElementById("conformradio").innerHTML =
-    "会員判定の処理を実施します。。";
+    "会員判定の処理を実施します。";
   document.getElementById("msg_del").innerHTML = "実施する";
   document.getElementById("msg").style.display = "flex";
   document.getElementById("msg_del").dataset.type = "v_temp";
@@ -161,11 +161,11 @@ document.getElementById("msg_del").addEventListener("click", () => {
               .on("end", function () {
                 document.getElementById("msg").style.display = "none";
                 document.getElementById("loading").style.display = "none";
-                alert("Record Deleted of " + tp);
+                alert("ECのCSVデータを削除致しました。");
                 window.location.reload();
               });
           } else {
-            alert("ECのCSVデータを削除致しました。");
+            alert("ECのCSVデータは0件です。");
             window.location.reload();
           }
         }
@@ -200,11 +200,11 @@ document.getElementById("msg_del").addEventListener("click", () => {
               .on("end", function () {
                 document.getElementById("msg").style.display = "none";
                 document.getElementById("loading").style.display = "flex";
-                alert("実店舗のCSVデータを削除致しました。" + tp);
+                alert("実店舗のCSVデータを削除致しました。");
                 window.location.reload();
               });
           } else {
-            alert("The table is already empty");
+            alert("実店舗のCSVデータは0件です。");
             window.location.reload();
           }
         }
@@ -214,7 +214,7 @@ document.getElementById("msg_del").addEventListener("click", () => {
     document.getElementById("loading").style.display = "flex";
     //Checking the table
     if (real_datas_row.length == 0 || ec_datas_row.length == 0) {
-      alert("ECか店舗のCSVが０件です。双方のデータを登録して下さい。");
+      alert("ECか店舗のCSVが0件です。双方のデータを登録して下さい。");
       window.location.reload();
     } else {
       //First Delete Previous Data
